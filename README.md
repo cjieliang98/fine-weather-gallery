@@ -22,7 +22,7 @@
         "title": "公共艺术一",
         "desc": "",
         "location": "泗阳，江苏",
-        "src": "ggys1.jpg",
+        "src": "test.jpg",
         "year": "2024"
     }
     ```
