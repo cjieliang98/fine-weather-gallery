@@ -1,5 +1,31 @@
 <template>
   <main class="pa-4 dark:bg-#131130">
+    <footer class="flex flex-col items-center h-3vh">
+      <div class="text-xl c-slate-800 flex items-center">
+        <div class="
+          backdrop-blur-2 saturate-120%
+          pa-1 rd-50% cursor-pointer
+          simple-btn
+        " @click="isDark = !isDark">
+          <div :class="!isDark ? 'i-mdi:weather-night' : 'i-mdi:weather-sunny'"></div>
+        </div>
+        <div class="
+          backdrop-blur-2 saturate-120%
+          pa-1 rd-50% cursor-pointer
+          simple-btn
+        " @click="updateOrdering">
+          <div :class="ordering === 'random' ?
+            'i-mdi-shuffle' :
+            ordering === 'asc' ?
+              'i-mdi-sort-clock-descending' : 'i-mdi-sort-clock-ascending'
+            ">
+          </div>
+        </div>
+      </div>
+    </footer>
+    <div >
+
+    </div>
     <div class="h-100vh w-100vw dots fixed pointer-events-none" :class="{ 'dark': isDark }"></div>
     <div class="
       columns-1 sm:columns-2 md:columns-3 xl:columns-4 2xl:columns-5
@@ -28,10 +54,6 @@
         @click="openDetail(index)" />
     </div>
     <div class="flex my-18 items-center flex-col select-none text-xs">
-      <div v-if="isReady">
-        <emoji-reaction :reactor="reactor" :react="react" :unreact="unreact"
-          :getReactions="getReactions" :dark="isDark" />
-      </div>
       <div class="text-gray-400 mb-3 mt-2.5">
         {{ images.length }}<span class="mx-.5">/</span>{{ imagesEntire.length }}
       </div>
@@ -51,53 +73,6 @@
         No More
       </div>
     </div>
-    <footer class="flex flex-col items-center">
-      <div class="text-xl c-slate-800 flex items-center">
-        <div class="
-          backdrop-blur-2 saturate-120%
-          pa-1 rd-50% cursor-pointer
-          simple-btn
-        " @click="isDark = !isDark">
-          <div :class="!isDark ? 'i-mdi:weather-night' : 'i-mdi:weather-sunny'"></div>
-        </div>
-        <div class="
-          backdrop-blur-2 saturate-120%
-          pa-1 rd-50% cursor-pointer mx-2
-          simple-btn
-        " @click="jumpTo('https://github.com/tkzt/fine-weather-gallery')">
-          <div class="i-mdi-github"></div>
-        </div>
-        <div class="
-          backdrop-blur-2 saturate-120%
-          pa-1 rd-50% cursor-pointer
-          simple-btn
-        " @click="updateOrdering">
-          <div :class="ordering === 'random' ?
-            'i-mdi-sort-clock-ascending' :
-            ordering === 'asc' ?
-              'i-mdi-sort-clock-descending' : 'i-mdi-shuffle'
-            ">
-          </div>
-        </div>
-      </div>
-
-      <div class="text-xs c-gray-600 dark:c-gray-200 mt-3">
-        <div class="text-center">
-          <span>&copy; {{ new Date().getFullYear() }}</span>
-          <span class="
-            ml-2 inline-flex c-gray-600 items-center cursor-pointer b-1 b-solid b-transparent
-            hover:b-b-gray-600
-            dark:c-gray-200 dark:hover:b-b-gray-200
-          " @click="jumpTo('https://tkzt.cn')">
-            <span>Allen Tao</span>
-            <i class="i-mdi-open-in-new ml-1"></i>
-          </span>
-        </div>
-        <div class="text-gray-400 mt-1">Last updated at {{
-          imagesEntire.at(-1)?.updateAt || new Date().toLocaleString() }}
-        </div>
-      </div>
-    </footer>
     <ImageDetail v-model="imageDetailModel" v-bind="imageDetails"
       @lastImage="openDetail(imageDetails.current - 1)"
       @nextImage="openDetail(imageDetails.current + 1)" :total="imagesEntire.length" />
@@ -134,7 +109,7 @@ const emojiReactionKey = 'fine-weather.tkzt.cn';
 const apiBase = import.meta.env.VITE_API_BASE;
 const emojiReactions = ref([]);
 
-const ordering = useLocalStorage('fw-ordering', 'asc'); // 'asc' or 'desc' or 'random'
+const ordering = useLocalStorage('fw-ordering', 'random'); // 'asc' or 'desc' or 'random'
 const isDark = useDark();
 const imageDetailModel = ref(false);
 const loadingImages = ref(false);
